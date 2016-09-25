@@ -1,0 +1,57 @@
+/**
+ * Created by a on 6/3/2016.
+ */
+
+// grab the things we need
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+
+var contactSchema = new Schema({
+    contact:String,
+    type:String,
+    verified: Boolean
+});
+
+
+var scopeSchema = new Schema({
+
+    scope: { type: String, required: true},
+    read: Boolean,
+    write: Boolean,
+    delete: Boolean,
+
+})
+
+var menuScopeSchema = new Schema({
+
+    menuItem: {type: String, required: true},
+    menuAction: [scopeSchema],
+
+
+})
+
+
+var userSchema = new Schema({
+    name: String,
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    phoneNumber: { type: contactSchema, required: true },
+    email: { type: contactSchema, required: true },
+    company: { type: Number, required: true },
+    tenant: { type: Number, required: true },
+    contacts: [contactSchema],
+    user_meta: {},
+    app_meta: {},
+    user_scopes: [scopeSchema],
+    client_scopes: [menuScopeSchema],
+    created_at: Date,
+    updated_at: Date
+});
+
+
+
+
+var User = mongoose.model('User', userSchema);
+module.exports = User;
+
